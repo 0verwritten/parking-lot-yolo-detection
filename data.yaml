@@ -1,0 +1,13 @@
+train: ../weapon/train/images
+val: ../weapon/valid/images
+test: ../weapon/test/images
+
+nc: 5
+names: ['Grenade', 'Knife', 'Missile', 'Pistol', 'Rifle']
+
+roboflow:
+  workspace: edi-detection
+  project: weapon-yolo8
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/edi-detection/weapon-yolo8/dataset/1

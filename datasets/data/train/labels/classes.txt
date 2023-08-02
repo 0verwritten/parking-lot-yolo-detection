@@ -1,0 +1,4 @@
+CarIn
+CarOut
+GateOpened
+GateClosed

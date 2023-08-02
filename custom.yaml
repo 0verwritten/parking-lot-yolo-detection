@@ -1,0 +1,43 @@
+# path: /home/writer/Documents/university/2-3 summer school/datasets/archive_road_signs/ts/ts/
+# train: .
+# val: .
+# # train: /home/writer/Documents/university/2-3 summer school/datasets/archive_road_signs/ts/ts
+
+# nc: 4
+# names: 
+#   0: "prohibitory"
+#   1: "danger"
+#   2: "mandatory"
+#   3: "other"
+
+path: ./data
+train: ./train/images
+test: ./train/images
+val: ./val/images
+# train: ../weapon/train/images
+
+# val: ../weapon/valid/images
+# test: ../weapon/test/images
+
+# nc: 5
+# names: ['Grenade', 'Knife', 'Missile', 'Pistol', 'Rifle']
+nc: 4
+names: ['CarIn', 'CarOut', 'GateOpened', 'GateClosed']
+
+
+# test: ./data/test/images
+# val: ./data/val/images
+
+# # train: ./car/training_images
+# # test: ./car/testing_images
+# # val: ./car/testing_images
+
+# #Classes
+# # nc: 1
+# nc: 20
+
+# #classes names
+# #replace all class names list with your classes names
+# # names: ['car']
+
+# names: ["dog", "person", "cat", "tv", "car", "meatballs", "marinara sauce", "tomato soup", "chicken noodle soup", "french onion soup", "chicken breast", "ribs", "pulled pork", "hamburger", "cavity", "open_gate", "car_in", "car_out", "gate_opened", "gate_closed"]
