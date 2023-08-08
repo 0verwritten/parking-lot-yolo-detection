@@ -83,7 +83,8 @@ dataset/
 - The `classes.txt` file should list all the class names, one per line.
 
 ## Training
-To train the YOLO model on your custom dataset, follow these steps:
+This script enables you to train a YOLO (You Only Look Once) object detection model using the Ultralytics YOLO framework. The script supports both local datasets and datasets hosted on Roboflow. It provides various training configuration options and supports exporting the trained model in different formats.
+#### To train the YOLO model on your custom dataset, follow these steps:
 
 1. Organize your dataset as described in the [Dataset](#dataset) section.
 
@@ -107,6 +108,17 @@ To evaluate the performance of the trained YOLO model, run the following command
 
 ```
 python test.py --dataset path/to/your/dataset/ --weights path/to/your/trained/weights
+```
+
+## Predicting results
+To predict data use command line:
+```
+python predict.py --source path-to-your-source --model path-to-your-model
+```
+
+#### Example:
+```
+python predict.py --source '/home/writer/Documents/university/2-3 summer school/datasets/data/videoplayback.mp4' --model '/home/writer/Documents/university/2-3 summer school/yolov5/runs/detect/train29/weights/best.pt' --no-output --preview --gpu
 ```
 
 ## Results
