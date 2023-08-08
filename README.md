@@ -95,6 +95,11 @@ To train the YOLO model on your custom dataset, follow these steps:
 python train.py --dataset path/to/your/dataset/ --config config/config.yaml
 ```
 
+#### Optionally you can use [Roboflow](https://app.roboflow.com/) dataset to train your model
+```
+python train.py --roboflow-project name-of-your-project [ --api-key your-api-key ]
+```
+
 4. The trained weights will be saved in the `weights` folder by default.
 
 ## Testing

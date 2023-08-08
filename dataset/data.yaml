@@ -1,0 +1,14 @@
+names:
+- CarIn
+- GateClosed
+- GateOpened
+nc: 3
+roboflow:
+  license: CC BY 4.0
+  project: parking-space-cgi5j
+  url: https://universe.roboflow.com/worker-lod8r/parking-space-cgi5j/dataset/1
+  version: 1
+  workspace: worker-lod8r
+test: ../test/images
+train: ./dataset/train/images
+val: ./dataset/valid/images
