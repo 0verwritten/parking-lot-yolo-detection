@@ -2,6 +2,9 @@
 from matplotlib import pyplot as plt
 from ultralytics import YOLO
 from roboflow import Roboflow
+import tensorflow as tf
+import platform
+import torch
 import numpy as np
 import cv2
 import os
@@ -37,15 +40,24 @@ def train_model(
     model = YOLO(model_name)
 
     # Set processing unit (CPU/GPU/TPU)
-    model.to("cpu:0")
-    # if processing_unit != ProcessingUnits.CPU:
-    #     pass
-
+    match processing_unit:
+        case ProcessingUnits.GPU:
+            if device := ("cuda" if torch.cuda.is_available() else "cpu"):
+                model.to(device)
+        case ProcessingUnits.TPU:
+            if platform.machine() == "aarch64" and "USB Accelerator" in platform.uname().release:
+                model.to("edge")
+                edgetpu_delegate = tf.lite.experimental.load_delegate('libedgetpu.so.1')
+                interpreter = tf.lite.Interpreter(model_path=args.model_path)
+                interpreter.add_delegate(edgetpu_delegate)
+        case _:
+            model.to("cpu")
+    
     # Train the model using provided parameters
-    model.train(data=dataset_path, epochs=epochs, workers=workers, batch=batch)
+    model.train(data=config_path, epochs=epochs, workers=workers, batch=batch)
 
     # Export the trained model
-    model.export(format=output_format or "pt", export_path=output_path or "model/yolov8s.pt")
+    model.export(format=output_format or "pt")
 
 # Entry point of the script
 if __name__ == "__main__":

@@ -10,5 +10,5 @@ roboflow:
   version: 1
   workspace: worker-lod8r
 test: ../test/images
-train: ./dataset/train/images
-val: ./dataset/valid/images
+train: ../train/images
+val: ../valid/images
