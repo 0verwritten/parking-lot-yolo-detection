@@ -54,6 +54,7 @@ def train_model(
         case ProcessingUnits.GPU:
             if not tf.test.gpu_device_name():
                 print("!! Warning: GPU not found !!")
+                interpreter = tf.lite.Interpreter(model_path=model_name)
             else:
                 try:
                     gpu_delegate = tf.lite.experimental.load_delegate('libedgetpu.so.1.0')

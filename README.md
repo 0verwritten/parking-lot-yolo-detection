@@ -98,7 +98,7 @@ python train.py --dataset path/to/your/dataset/ --config config/config.yaml
 
 #### Example:
 ```
-python3 train.py --roboflow-api-key xfrYuTKsBzPt4fTpwX0r --roboflow-project parking-space-cgi5j --roboflow-project-version 1 --gpu --output-format onnx
+python3 train.py --roboflow-api-key xfrYuTKsBzPt4fTpwX0r --roboflow-project parking-space-cgi5j --roboflow-project-version 1 --gpu --output-format tflite
 ```
 
 #### Optionally you can use [Roboflow](https://app.roboflow.com/) dataset to train your model

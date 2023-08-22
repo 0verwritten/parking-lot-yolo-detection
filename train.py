@@ -23,7 +23,7 @@ def train_model(
     config_path: str,
     model_name: str,
     processing_unit: ProcessingUnits,
-    epochs: int = 3,
+    epochs: int = 4,
     workers: int = 8,
     batch: int = 8,
     output_path: str = None,
@@ -43,6 +43,8 @@ def train_model(
     match processing_unit:
         case ProcessingUnits.GPU:
             if device := ("cuda" if torch.cuda.is_available() else "cpu"):
+                torch.cuda.empty_cache()
+                torch.cuda.memory_summary(device=None, abbreviated=False)
                 model.to(device)
         case ProcessingUnits.TPU:
             if platform.machine() == "aarch64" and "USB Accelerator" in platform.uname().release:
@@ -58,6 +60,9 @@ def train_model(
 
     # Export the trained model
     model.export(format=output_format or "pt")
+
+    model = YOLO('model/yolov8s.pt')
+    model.predict('./dataset/train/images/image-074_jpeg.rf.c4fbeb9df3a3904382cab370a1c0f429.jpg', show=True)
 
 # Entry point of the script
 if __name__ == "__main__":
