@@ -96,6 +96,11 @@ This script enables you to train a YOLO (You Only Look Once) object detection mo
 python train.py --dataset path/to/your/dataset/ --config config/config.yaml
 ```
 
+#### Example:
+```
+python3 train.py --roboflow-api-key xfrYuTKsBzPt4fTpwX0r --roboflow-project parking-space-cgi5j --roboflow-project-version 1 --gpu --output-format onnx
+```
+
 #### Optionally you can use [Roboflow](https://app.roboflow.com/) dataset to train your model
 ```
 python train.py --roboflow-project name-of-your-project [ --api-key your-api-key ]
@@ -118,7 +123,7 @@ python predict.py --source path-to-your-source --model path-to-your-model
 
 #### Example:
 ```
-python predict.py --source '/home/writer/Documents/university/2-3 summer school/datasets/data/videoplayback.mp4' --model '/home/writer/Documents/university/2-3 summer school/yolov5/runs/detect/train29/weights/best.pt' --no-output --preview --gpu
+python predict.py --source './datasets/data/videoplayback.mp4' --model './yolov5/runs/detect/train29/weights/best.pt' --no-output --preview --gpu
 ```
 
 ## Results
