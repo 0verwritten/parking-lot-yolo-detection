@@ -49,80 +49,83 @@ def train_model(
     verbose: bool = False,
 ):
 
-    # Set processing unit (CPU/GPU/TPU)
-    match processing_unit:
-        case ProcessingUnits.GPU:
-            if not tf.test.gpu_device_name():
-                print("!! Warning: GPU not found !!")
-                interpreter = tf.lite.Interpreter(model_path=model_name)
-            else:
-                try:
-                    gpu_delegate = tf.lite.experimental.load_delegate('libedgetpu.so.1.0')
-                    interpreter = tf.lite.Interpreter(model_path=model_name, experimental_delegates=[gpu_delegate])
-                except Exception:
-                    print("!! Warning: GPU delegate not found !!")
-                    interpreter = tf.lite.Interpreter(model_path=model_name)
-        case ProcessingUnits.TPU:
-            if platform.machine() == "aarch64" and "USB Accelerator" in platform.uname().release:
-                edgetpu_delegate = tf.lite.experimental.load_delegate('libedgetpu.so.1')
-                interpreter = tf.lite.Interpreter(model_path=model_name, experimental_delegates=[edgetpu_delegate])
-            else:
-                print("!! Warning: TPU not found !!")
-                interpreter = tf.lite.Interpreter(model_path=model_name)
-        case _:
-            tf.config.set_visible_devices([], 'GPU')
-            interpreter = tf.lite.Interpreter(model_path=model_name)
+    # # Set processing unit (CPU/GPU/TPU)
+    # match processing_unit:
+    #     case ProcessingUnits.GPU:
+    #         if not tf.test.gpu_device_name():
+    #             print("!! Warning: GPU not found !!")
+    #             interpreter = tf.lite.Interpreter(model_path=model_name)
+    #         else:
+    #             try:
+    #                 gpu_delegate = tf.lite.experimental.load_delegate('libedgetpu.so.1.0')
+    #                 interpreter = tf.lite.Interpreter(model_path=model_name, experimental_delegates=[gpu_delegate])
+    #             except Exception:
+    #                 print("!! Warning: GPU delegate not found !!")
+    #                 interpreter = tf.lite.Interpreter(model_path=model_name)
+    #     case ProcessingUnits.TPU:
+    #         if platform.machine() == "aarch64" and "USB Accelerator" in platform.uname().release:
+    #             edgetpu_delegate = tf.lite.experimental.load_delegate('libedgetpu.so.1')
+    #             interpreter = tf.lite.Interpreter(model_path=model_name, experimental_delegates=[edgetpu_delegate])
+    #         else:
+    #             print("!! Warning: TPU not found !!")
+    #             interpreter = tf.lite.Interpreter(model_path=model_name)
+    #     case _:
+    #         tf.config.set_visible_devices([], 'GPU')
+    #         interpreter = tf.lite.Interpreter(model_path=model_name)
 
-    interpreter.allocate_tensors()
-    input_details = interpreter.get_input_details()
-    output_details = interpreter.get_output_details()
+    # interpreter.allocate_tensors()
+    # input_details = interpreter.get_input_details()
+    # output_details = interpreter.get_output_details()
 
-    def preprocess_image(image, target_size):
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = cv2.resize(image, target_size)
-        image = image / 255.0
-        return np.expand_dims(image, axis=0).astype(np.float32)
+    # def preprocess_image(image, target_size):
+    #     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    #     image = cv2.resize(image, target_size)
+    #     image = image / 255.0
+    #     return np.expand_dims(image, axis=0).astype(np.float32)
 
-    def predict_with_tflite(image):
-        input_data = preprocess_image(image,  (640, 640))
-        interpreter.set_tensor(input_details[0]['index'], input_data)
-        interpreter.invoke()
-        output_data = interpreter.get_tensor(output_details[0]['index'])
-        return output_data
+    # def predict_with_tflite(image):
+    #     input_data = preprocess_image(image,  (640, 640))
+    #     interpreter.set_tensor(input_details[0]['index'], input_data)
+    #     interpreter.invoke()
+    #     output_data = interpreter.get_tensor(output_details[0]['index'])
+    #     return output_data
 
-    if preview:
-        cap = cv2.VideoCapture(source)
-        print(cap, cap.isOpened())
-        while cap.isOpened():
-            ret, frame = cap.read()
+    # if preview:
+    #     cap = cv2.VideoCapture(source)
+    #     print(cap, cap.isOpened())
+    #     while cap.isOpened():
+    #         ret, frame = cap.read()
             
-            output = predict_with_tflite(frame)
+    #         output = predict_with_tflite(frame)
 
-            # Process the output as needed
-            print(output)
-            # Process the output to draw bounding boxes
-            for detection in output[0]:
-                score = detection[2]
-                if score > 0.5:  # Adjust this threshold based on your model
-                    class_id = int(detection[1])
-                    class_name = label_map[class_id]
-                    left = int(detection[3] * frame.shape[1])
-                    top = int(detection[4] * frame.shape[0])
-                    right = int(detection[5] * frame.shape[1])
-                    bottom = int(detection[6] * frame.shape[0])
+    #         # Process the output as needed
+    #         print(output)
+    #         # Process the output to draw bounding boxes
+    #         for detection in output[0]:
+    #             score = detection[2]
+    #             if score > 0.5:  # Adjust this threshold based on your model
+    #                 class_id = int(detection[1])
+    #                 class_name = label_map[class_id]
+    #                 left = int(detection[3] * frame.shape[1])
+    #                 top = int(detection[4] * frame.shape[0])
+    #                 right = int(detection[5] * frame.shape[1])
+    #                 bottom = int(detection[6] * frame.shape[0])
 
-                    # Draw bounding box and label
-                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-                    cv2.putText(frame, f'{class_name}: {score:.2f}', (left, top - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+    #                 # Draw bounding box and label
+    #                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+    #                 cv2.putText(frame, f'{class_name}: {score:.2f}', (left, top - 10),
+    #                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
 
-            # Display the frame with OpenCV
-            cv2.imshow('Frame', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-        cap.release()
-        cv2.destroyAllWindows()
+    #         # Display the frame with OpenCV
+    #         cv2.imshow('Frame', frame)
+    #         if cv2.waitKey(1) & 0xFF == ord('q'):
+    #             break
+    #     cap.release()
+    #     cv2.destroyAllWindows()
+
+    model = YOLO(model_name)
+    model.predict(source, show=True)
 
 
 # Entry point of the script
