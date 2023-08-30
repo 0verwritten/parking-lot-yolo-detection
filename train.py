@@ -61,9 +61,6 @@ def train_model(
     # Export the trained model
     model.export(format=output_format or "pt")
 
-    model = YOLO('model/yolov8s.pt')
-    model.predict('./dataset/train/images/image-074_jpeg.rf.c4fbeb9df3a3904382cab370a1c0f429.jpg', show=True)
-
 # Entry point of the script
 if __name__ == "__main__":
     # Create an argument parser
@@ -76,7 +73,7 @@ if __name__ == "__main__":
     parser.add_argument("--roboflow-project-version", type=int, default=1, help="Version of your Roboflow project.")
     parser.add_argument("--roboflow-api-key", type=str, help="Your Roboflow API key.")
     parser.add_argument("--dataset", type=str, help="Path to your dataset.")
-    parser.add_argument("--override", action="store_true", help="Override existing dataset.")
+    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing dataset.")
     parser.add_argument("--model", type=str, default="model/yolov8s.pt", help="Name of your yolo model.", metavar="default: model/yolov8s.pt")
     parser.add_argument("--output", type=str, help="Path to output directory.")
     parser.add_argument("--output-format", type=str, help=f"Output format, e.g. {', '.join(AVALIABLE_EXPORT_FORMATS)}.")
@@ -99,7 +96,7 @@ if __name__ == "__main__":
         exit()
 
     # Handle Roboflow integration
-    if args.roboflow_api_key and not args.roboflow_project:
+    if args.roboflow_api_key and not args.roboflow_project and not args.dataset:
         print(
             f"{Fore.YELLOW}Warning: You must specify a Roboflow project name if you want to use the Roboflow API key.{Style.RESET_ALL}"
         )
@@ -109,11 +106,11 @@ if __name__ == "__main__":
             args.roboflow_api_key = getpass(prompt="Enter your Roboflow API key: ")
 
         roboflow = Roboflow(api_key=args.roboflow_api_key)
-        project = roboflow.workspace("worker-lod8r").project("parking-space-cgi5j")
+        project = roboflow.workspace("worker-lod8r").project(args.roboflow_project)
         dataset = project.version(args.roboflow_project_version).download(
             model_format="yolov8",
             location=args.dataset or "./dataset",
-            overwrite=args.override,
+            overwrite=args.overwrite,
         )
 
         args.dataset = dataset.location

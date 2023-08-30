@@ -96,9 +96,28 @@ This script enables you to train a YOLO (You Only Look Once) object detection mo
 python train.py --dataset path/to/your/dataset/ --config config/config.yaml
 ```
 
+### Arguments
+
+- `--roboflow-project`: Name of your Roboflow project.
+- `--roboflow-project-version`: Version of your Roboflow project (default: 1).
+- `--roboflow-api-key`: Your Roboflow API key.
+- `--dataset`: Path to your training dataset directory containing images and annotations.
+- `--overwrite`: Overwrite existing dataset (include this flag to enable).
+- `--model`: Name of the YOLO model for training (default: `"model/yolov8s.pt"`).
+- `--output`: Path to the output directory for saving the trained model and artifacts.
+- `--output-format`: Output format for exporting the trained model (choose from available formats).
+- `--gpu`: Use GPU for training (include this flag if you have a GPU).
+- `--tpu`: Use TPU for training (include this flag if you have a TPU).
+- `--epochs`: Number of epochs for training (default: 3).
+- `--workers`: Number of workers for training (default: 8).
+- `--batch`: Batch size for training (default: 8).
+- `--config`: Path to a configuration file (if needed).
+- `--verbose`: Enable verbose mode (include this flag to enable).
+
 #### Example:
 ```
 python3 train.py --roboflow-api-key xfrYuTKsBzPt4fTpwX0r --roboflow-project parking-space-cgi5j --roboflow-project-version 1 --gpu --output-format tflite
+parking-lot-detection-ufzkx
 ```
 
 #### Optionally you can use [Roboflow](https://app.roboflow.com/) dataset to train your model
@@ -108,18 +127,18 @@ python train.py --roboflow-project name-of-your-project [ --api-key your-api-key
 
 4. The trained weights will be saved in the `weights` folder by default.
 
-## Testing
-To evaluate the performance of the trained YOLO model, run the following command:
-
-```
-python test.py --dataset path/to/your/dataset/ --weights path/to/your/trained/weights
-```
-
 ## Predicting results
 To predict data use command line:
 ```
 python predict.py --source path-to-your-source --model path-to-your-model
 ```
+
+### Arguments
+
+- `--source`: Path to your training data directory containing images and annotations.
+- `--model`: Name of the YOLO model for training (default: `"model/yolov8n.pt"`).
+- `--gpu`: Use GPU for training (include this flag if you have a GPU).
+- `--tpu`: Use TPU for training (include this flag if you have a TPU).
 
 #### Example:
 ```
